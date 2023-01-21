@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <link href="css/login.css" type="text/css" rel="stylesheet" />
+    <script src="js/jquery-3.4.1.min.js"></script>
+
+    <title>登录</title>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="front">
+            <form id="regform">
+                <div class="logo">
+                    <p class="logoBrand"></p>
+                    <p>CloudPC</p>
+                </div>
+                <div class="warning">
+                    <p>禁止破坏及运行病毒</p>
+                    <p>违者必追究责任</p>
+                </div>
+                <div class="inputText" id="user">
+                    <input type="text" id="user_text" required maxlength="15">
+                    <span data-placeholder="用户名"></span>
+                </div>
+
+                <div class="inputText" id="password">
+                    <input type="password" id="password_text" required pattern=".{6,}" title=密码最短6个字符" maxlength="16">
+                    <span data-placeholder="密码"></span>
+                </div>
+
+                <div class="inputText" id="captcha">
+                    <input type="text" id="captcha_text" required maxlength="4">
+                    <img src="./captcha.php" alt="" id="captcha_img">
+                    <span data-placeholder="验证码"></span>
+                </div>
+
+                <button type="submit" id="register" class="button">注册</button>
+            </form>
+            <Br>
+            <Br>
+            <p>本网站由云计算服务支持<p>
+            <form id="downform" style="display: none;">
+                <div class="logo">
+                    <p class="logoBrand"></p>
+                    <p>CloudPC</p>
+                </div>
+                <div class="warning">
+                    <p>禁止破坏及运行病毒</p>
+                    <p>违者必追究责任</p>
+                    <br>
+                    <p>恭喜您, 成功创建用户!</p>
+                    <p>您可以使用微软远程桌面连接。
+官方用户交流群：736783154，内附使用教程和连接工具</p>
+                    <p>服务器 IP:122.228.8.45:37233</p>
+                    <br>
+                    <br>
+                </div>
+                <button type="submit" id="cloudhub" class="button">已完成</button>
+            </form>
+        </div>
+        <script type="text/javascript">
+            $("#regform").submit(() => {
+                try {
+                    $.get("/register.php", {
+                        code: $("#captcha_text").val(),
+                        user: $("#user_text").val(),
+                        password: $("#password_text").val()
+                    }, (data) => {
+                        console.log(11)
+                        $("#captcha_img").src = "./captcha.php";
+                        console.log(11)
+                        if (data.code != 0) {
+                            alert(data.reason);
+                        } else {
+                            $("#regform").css("display", "none");
+                            $("#downform").css("display", "block");
+                        }
+                    });
+                } catch { }
+                return false;
+            });
+            $("#downform").submit(() => {
+                try {
+                    window.open("https://www.crabdrive.cn/s/A29U7", "_blank");
+                } catch { }
+                return false;
+            });
+            $(".inputText input").on("focus", function () {
+                $(this).addClass("focus");
+            });
+            $(".inputText input").on("blur", function () {
+                if ($(this).val() == "")
+                    $(this).removeClass("focus");
+            });
+        </script>
+
+</body>
+
+</html>
